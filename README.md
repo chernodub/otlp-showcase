@@ -2,11 +2,11 @@
 
 ![image](./docs/Screenshot%202024-09-05%20at%2013.24.38.png)
 
-This project demonstrates a comprehensive observability setup for a modern full-stack application, highlighting best practices in monitoring and troubleshooting distributed systems.
+This project demonstrates an observability setup for a modern full-stack application, exploring practices in monitoring and troubleshooting distributed systems.
 
 ## Project Overview
 
-The showcase consists of a simple yet realistic application architecture, incorporating:
+The showcase consists of a simple yet somehow realistic application architecture, incorporating:
 * A frontend application
 * A backend service
 * A microservice
