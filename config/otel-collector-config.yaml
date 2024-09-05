@@ -1,0 +1,69 @@
+receivers:
+  otlp:
+    protocols:
+      grpc:
+        endpoint: 0.0.0.0:4317
+      http:
+        endpoint: 0.0.0.0:4318
+        cors:
+          allowed_origins:
+            - http://localhost:3000
+          allowed_headers: ['*']
+          max_age: 7200
+processors:
+  batch:
+  tail_sampling:
+    decision_wait: 10s
+    expected_new_traces_per_sec: 10
+    policies:
+      [
+        {
+          name: probabilistic-policy,
+          type: probabilistic,
+          probabilistic: { sampling_percentage: 50 },
+        },
+        {
+          name: trace-status-policy,
+          type: status_code,
+          status_code: { status_codes: [ERROR] },
+        },
+      ]
+
+exporters:
+  debug:
+    verbosity: detailed
+
+  otlphttp:
+    endpoint: http://loki:3100/otlp/
+
+  otlp:
+    endpoint: tempo:4317
+    tls:
+      insecure: true
+
+  prometheusremotewrite:
+    endpoint: 'http://prometheus:9090/api/v1/write'
+    tls:
+      insecure: true
+
+extensions:
+  health_check:
+  pprof:
+  zpages:
+
+service:
+  telemetry:
+    logs:
+      level: DEBUG
+  extensions: [health_check, pprof, zpages]
+  pipelines:
+    traces:
+      receivers: [otlp]
+      processors: [tail_sampling]
+      exporters: [otlp]
+    logs:
+      receivers: [otlp]
+      exporters: [otlphttp]
+    metrics:
+      receivers: [otlp]
+      exporters: [prometheusremotewrite]
