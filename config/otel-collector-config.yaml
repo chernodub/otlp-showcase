@@ -51,6 +51,10 @@ extensions:
   pprof:
   zpages:
 
+connectors:
+  spanmetrics:
+    namespace: span.metrics
+
 service:
   telemetry:
     logs:
@@ -60,10 +64,10 @@ service:
     traces:
       receivers: [otlp]
       processors: [tail_sampling]
-      exporters: [otlp]
+      exporters: [otlp, spanmetrics]
     logs:
       receivers: [otlp]
       exporters: [otlphttp]
     metrics:
-      receivers: [otlp]
+      receivers: [spanmetrics, otlp]
       exporters: [prometheusremotewrite]
