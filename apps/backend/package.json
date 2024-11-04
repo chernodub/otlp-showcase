@@ -20,7 +20,8 @@
     "@opentelemetry/sdk-metrics": "^1.26.0",
     "@opentelemetry/sdk-node": "^0.53.0",
     "@opentelemetry/sdk-trace-node": "^1.26.0",
-    "fastify": "^4.28.1",
+    "fastify": "^5.1.0",
+    "fastify-lifecycle-performance-measurement-plugin": "^0.1.1",
     "pino": "^9.3.2"
   }
 }

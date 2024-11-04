@@ -5,6 +5,12 @@ import { OTLPTraceExporter } from '@opentelemetry/exporter-trace-otlp-http';
 import { PeriodicExportingMetricReader } from '@opentelemetry/sdk-metrics';
 import { logs, NodeSDK } from '@opentelemetry/sdk-node';
 
+export const metricReader = new PeriodicExportingMetricReader({
+  exporter: new OTLPMetricExporter({
+    url: 'http://otel-collector:4318/v1/metrics',
+  }),
+  exportIntervalMillis: 1000,
+});
 const sdk = new NodeSDK({
   serviceName: 'backend',
   instrumentations: [
@@ -19,11 +25,7 @@ const sdk = new NodeSDK({
       })
     ),
   ],
-  metricReader: new PeriodicExportingMetricReader({
-    exporter: new OTLPMetricExporter({
-      url: 'http://otel-collector:4318/v1/metrics',
-    }),
-  }),
+  metricReader: metricReader,
   traceExporter: new OTLPTraceExporter({
     url: 'http://otel-collector:4318/v1/traces',
   }),
